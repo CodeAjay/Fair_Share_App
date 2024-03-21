@@ -1,5 +1,6 @@
 package com.example.expensetracker;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 
 //import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -35,10 +37,18 @@ public class MainActivity extends AppCompatActivity implements OnItemsClick{
     private ExpensesAdapter expenseAdapter;
     private long income = 0, expense = 0;
     Intent intent;
+
+    private static final int ADD_EXPENSE_REQUEST_CODE = 1; // Define a request code
+//    ActivityMainBinding binding;
+//    private ExpensesAdapter expenseAdapter;
+//    private long income = 0, expense = 0;
+//    Intent intent;
+    private ExpenseModel selectedExpenseModel; // To hold the selected expense for updating
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding =  ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         expenseAdapter = new ExpensesAdapter(this, this);
@@ -47,21 +57,72 @@ public class MainActivity extends AppCompatActivity implements OnItemsClick{
 
         intent = new Intent(MainActivity.this, AddExpenseActivity.class);
 
-        binding.addIncome.setOnClickListener(new View.OnClickListener() {
+        binding.addExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddExpenseActivity.class);
                 intent.putExtra("type", "Income");
-                startActivity(intent);
+                intent.putExtra("model", selectedExpenseModel); // Pass the selected expense model
+                startActivityForResult(intent, ADD_EXPENSE_REQUEST_CODE);
             }
         });
         binding.addExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddExpenseActivity.class);
                 intent.putExtra("type", "Expense");
-                startActivity(intent);
+                intent.putExtra("model", selectedExpenseModel); // Pass the selected expense model
+                startActivityForResult(intent, ADD_EXPENSE_REQUEST_CODE);
             }
         });
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_EXPENSE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // Update the selected expense model if an expense was modified in AddExpenseActivity
+            selectedExpenseModel = (ExpenseModel) data.getSerializableExtra("model");
+            // Refresh UI or perform any other necessary actions
+        }
+    }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == ADD_EXPENSE_REQUEST_CODE && resultCode == Activity.RESULT_CANCELED) {
+//            // Reset expenseModel if AddExpenseActivity was canceled
+//            selectedExpenseModel = null;
+//        }
+//    }
+
+
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        binding =  ActivityMainBinding.inflate(getLayoutInflater());
+//        setContentView(binding.getRoot());
+//
+//        expenseAdapter = new ExpensesAdapter(this, this);
+//        binding.recycler.setAdapter(expenseAdapter);
+//        binding.recycler.setLayoutManager(new LinearLayoutManager(this));
+//
+//        intent = new Intent(MainActivity.this, AddExpenseActivity.class);
+//
+//        binding.addIncome.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                intent.putExtra("type", "Income");
+//                startActivity(intent);
+//            }
+//        });
+//        binding.addExpense.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                intent.putExtra("type", "Expense");
+//                startActivity(intent);
+//            }
+//        });
+//    }
 
     @Override
     protected void onStart() {
