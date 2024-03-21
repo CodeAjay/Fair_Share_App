@@ -54,6 +54,14 @@ public class AddExpenseActivity extends AppCompatActivity {
             }
         }
 
+
+        if (type.equals("Income")){
+            binding.incomeRadio.setChecked(true);
+        }
+        else {
+            binding.expenseRadio.setChecked(true);
+        }
+
         binding.incomeRadio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +75,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                 type = "Expense";
             }
         });
+
     }
 
     @Override
