@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="green">#4CAF50</color>
+    <color name="yellow">#FFC107</color>
+    <color name="edittext_background_color">#ECEFF1</color> <!-- Light Gray -->
+    <color name="button_pressed_color">#4CAF50</color> <!-- Green -->
+    <color name="button_default_color">#2196F3</color> <!-- Blue -->
+    <color name="edittext_text_color">#000000</color> <!-- Black -->
+    <color name="button_text_color">#FFFFFF</color>
+</resources>
