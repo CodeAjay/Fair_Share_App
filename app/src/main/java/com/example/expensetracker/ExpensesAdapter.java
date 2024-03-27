@@ -1,6 +1,7 @@
 package com.example.expensetracker;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,11 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
         holder.category.setText(expenseModel.getCategory());
         holder.amount.setText(String.valueOf(expenseModel.getAmount()));
 
+        int color = expenseModel.getType().equals("Income") ? Color.GREEN : Color.RED;
+        holder.amount.setTextColor(color);
+        holder.inr.setTextColor(color);
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -60,9 +66,13 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
         return expenseModelList.size();
     }
 
+    public List<ExpenseModel> getItems() {
+        return expenseModelList;
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView note, category, date, amount;
+        private TextView note, category, date, amount, inr;
         public MyViewHolder(@NonNull View itemView) {
 
             super(itemView);
@@ -70,6 +80,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
             category = itemView.findViewById(R.id.category);
             date = itemView.findViewById(R.id.date);
             amount = itemView.findViewById(R.id.amount);
+            inr = itemView.findViewById(R.id.INR);
         }
     }
 }

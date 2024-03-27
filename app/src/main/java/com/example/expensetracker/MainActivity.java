@@ -3,6 +3,7 @@ package com.example.expensetracker;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.example.expensetracker.databinding.ActivityMainBinding;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -30,7 +32,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements OnItemsClick{
     ActivityMainBinding binding;
@@ -83,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnItemsClick{
             // Update the selected expense model if an expense was modified in AddExpenseActivity
             selectedExpenseModel = (ExpenseModel) data.getSerializableExtra("model");
             // Refresh UI or perform any other necessary actions
+            getData();
         }
     }
 
@@ -169,11 +176,22 @@ public class MainActivity extends AppCompatActivity implements OnItemsClick{
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         expenseAdapter.clear();
                         List<DocumentSnapshot> dsList = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot ds:dsList){
+
+                        // Sort the list based on 'time' field in descending order
+                        Collections.sort(dsList, new Comparator<DocumentSnapshot>() {
+                            @Override
+                            public int compare(DocumentSnapshot o1, DocumentSnapshot o2) {
+                                Long time1 = (Long) o1.get("time");
+                                Long time2 = (Long) o2.get("time");
+                                return time2.compareTo(time1);
+                            }
+                        });
+
+                        for (DocumentSnapshot ds : dsList) {
                             ExpenseModel expenseModel = ds.toObject(ExpenseModel.class);
-                            if (expenseModel.getType().equals("Income")){
+                            if (expenseModel.getType().equals("Income")) {
                                 income += expenseModel.getAmount();
-                            }else{
+                            } else {
                                 expense += expenseModel.getAmount();
                             }
                             expenseAdapter.add(expenseModel);
@@ -184,24 +202,53 @@ public class MainActivity extends AppCompatActivity implements OnItemsClick{
     }
 
     private void setUpGraph() {
-        List<PieEntry> pieEntryList = new ArrayList<>();
-        List<Integer> colorsList = new ArrayList<>();
-        if (income != 0){
-            pieEntryList.add(new PieEntry(income, "Income"));
-            colorsList.add(getResources().getColor(R.color.green));
-        }
-        if (expense != 0){
-            pieEntryList.add(new PieEntry(expense, "Expense"));
-            colorsList.add(getResources().getColor(R.color.yellow));
-        }
-        PieDataSet pieDataSet = new PieDataSet(pieEntryList, String.valueOf(income - expense));
-        pieDataSet.setColors(colorsList);
-        pieDataSet.setValueTextColor(getResources().getColor(R.color.white));
-        PieData pieDat = new PieData( pieDataSet);
+        // Get expenses grouped by category
+        Map<String, Long> categoryExpenses = new HashMap<>();
+        for (ExpenseModel expenseModel : expenseAdapter.getItems()) {
+            if (!expenseModel.getType().equals("Income")) { // Exclude income expenses
+                String category = expenseModel.getCategory();
+                long amount = expenseModel.getAmount();
 
-        binding.pieChart.setData(pieDat);
+                // Aggregate expenses by category
+                if (categoryExpenses.containsKey(category)) {
+                    categoryExpenses.put(category, categoryExpenses.get(category) + amount);
+                } else {
+                    categoryExpenses.put(category, amount);
+                }
+            }
+        }
+
+        // Create pie entries for each category
+        List<PieEntry> pieEntries = new ArrayList<>();
+        for (Map.Entry<String, Long> entry : categoryExpenses.entrySet()) {
+            String category = entry.getKey();
+            long amount = entry.getValue();
+
+            pieEntries.add(new PieEntry(amount, category)); // Add category as label
+        }
+
+        // Create pie data set
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+
+        // Customize pie data set
+        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        pieDataSet.setValueTextColor(Color.WHITE);
+        pieDataSet.setDrawValues(false); // Disable drawing values
+        pieDataSet.setValueLinePart1OffsetPercentage(80.f); // Position of first line (line break)
+        pieDataSet.setValueLinePart2Length(0.6f); // Length of second line
+        pieDataSet.setValueLineColor(Color.BLACK); // Color of value line
+
+        // Create pie data
+        PieData pieData = new PieData(pieDataSet);
+
+        // Set data to pie chart
+        binding.pieChart.setData(pieData);
         binding.pieChart.invalidate();
     }
+
+
+
+
 
     @Override
     public void onClick(ExpenseModel expenseModel) {

@@ -8,6 +8,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 //import androidx.activity.EdgeToEdge;
@@ -31,51 +36,58 @@ public class AddExpenseActivity extends AppCompatActivity {
     ActivityAddExpenseBinding binding;
     private String type;
     private ExpenseModel expenseModel;
+    private EditText amountEditText, noteEditText;
+    private RadioGroup typeRadioGroup;
+    private RadioButton incomeRadio, expenseRadio;
+    private Spinner categorySpinner;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityAddExpenseBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_add_expense);
 
-        type = getIntent().getStringExtra("type");
+        amountEditText = findViewById(R.id.amount);
+        noteEditText = findViewById(R.id.note);
+        typeRadioGroup = findViewById(R.id.typeRadioGroup);
+        incomeRadio = findViewById(R.id.incomeRadio);
+        expenseRadio = findViewById(R.id.expenseRadio);
+        categorySpinner = findViewById(R.id.categorySpinner);
+
+        // Populate Spinner with categories from resources
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.categories_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+
+        // Set default type to Expense
+        type = "Expense";
         expenseModel = (ExpenseModel) getIntent().getSerializableExtra("model");
-
         if (expenseModel != null) {
             type = expenseModel.getType();
-            binding.amount.setText(String.valueOf(expenseModel.getAmount()));
-            binding.category.setText(expenseModel.getCategory());
-            binding.note.setText(expenseModel.getNote());
+            amountEditText.setText(String.valueOf(expenseModel.getAmount()));
+            noteEditText.setText(expenseModel.getNote());
 
             if (type.equals("Income")) {
-                binding.incomeRadio.setChecked(true);
+                incomeRadio.setChecked(true);
             } else {
-                binding.expenseRadio.setChecked(true);
+                expenseRadio.setChecked(true);
             }
         }
 
-
-        if (type.equals("Income")){
-            binding.incomeRadio.setChecked(true);
-        }
-        else {
-            binding.expenseRadio.setChecked(true);
-        }
-
-        binding.incomeRadio.setOnClickListener(new View.OnClickListener() {
+        // Radio button click listeners to set the expense type
+        incomeRadio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 type = "Income";
             }
         });
 
-        binding.expenseRadio.setOnClickListener(new View.OnClickListener() {
+        expenseRadio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 type = "Expense";
             }
         });
-
     }
 
     @Override
@@ -95,163 +107,17 @@ public class AddExpenseActivity extends AppCompatActivity {
         if (id == R.id.saveExpense) {
             if (expenseModel == null) {
                 createExpense();
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("model", expenseModel);
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
             } else {
                 updateExpense();
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("model", expenseModel);
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
             }
             return true;
         }
         if (id == R.id.deleteExpense) {
             deleteExpense();
-            return true; // Return true to indicate that the event has been consumed
+            return true;
         }
-        return super.onOptionsItemSelected(item); // Return false if the menu item is not recognized
+        return super.onOptionsItemSelected(item);
     }
-
-
-//    private void deleteExpense() {
-//        FirebaseFirestore
-//                .getInstance()
-//                .collection("expenses")
-//                .document(expenseModel.getExpenseId())
-//                .delete()
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        setResult(Activity.RESULT_OK); // Set result to indicate success
-//                        finish();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        // Handle failure
-//                    }
-//                });
-//    }
-//
-//    private void createExpense() {
-//        // Your existing code...
-//        FirebaseFirestore
-//                .getInstance()
-//                .collection("expenses")
-//                .document(expenseId)
-//                .set(expenseModel)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        setResult(Activity.RESULT_OK); // Set result to indicate success
-//                        finish();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        // Handle failure
-//                    }
-//                });
-//    }
-//
-//    private void updateExpense() {
-//        // Your existing code...
-//        FirebaseFirestore
-//                .getInstance()
-//                .collection("expenses")
-//                .document(expenseId)
-//                .set(model)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        setResult(Activity.RESULT_OK); // Set result to indicate success
-//                        finish();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        // Handle failure
-//                    }
-//                });
-//    }
-
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        binding = ActivityAddExpenseBinding.inflate(getLayoutInflater());
-//        setContentView(binding.getRoot());
-//
-//        type = getIntent().getStringExtra("type");
-//        expenseModel = (ExpenseModel) getIntent().getSerializableExtra("model");
-//
-//        if (type == null) {
-//            type = expenseModel.getType();
-//            binding.amount.setText(String.valueOf(expenseModel.getAmount()));
-//            binding.category.setText(expenseModel.getCategory());
-//            binding.note.setText(expenseModel.getNote());
-//        }
-//
-//
-//        if (type.equals("Income")){
-//            binding.incomeRadio.setChecked(true);
-//        }
-//        else {
-//            binding.expenseRadio.setChecked(true);
-//        }
-//
-//        binding.incomeRadio.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                type = "Income";
-//            }
-//        });
-//
-//        binding.expenseRadio.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                type = "Expense";
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater  menuInflater = getMenuInflater();
-//        if (expenseModel == null){
-//            menuInflater.inflate(R.menu.add_menu,menu);
-//        }else{
-//            menuInflater.inflate(R.menu.update_menu,menu);
-//        }
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.saveExpense) {
-//            if (expenseModel == null) {
-//                createExpense();
-//            } else {
-//                updateExpense();
-//            }
-//            return true;
-//        }
-//        if (id == R.id.deleteExpense) {
-//            deleteExpense();
-//            return true; // Return true to indicate that the event has been consumed
-//        }
-//        return super.onOptionsItemSelected(item); // Return false if the menu item is not recognized
-//    }
-//
-
 
     @Override
     public void onBackPressed() {
@@ -285,74 +151,69 @@ public class AddExpenseActivity extends AppCompatActivity {
                 });
     }
 //
-    private void createExpense() {
+private void createExpense() {
+    String expenseId = UUID.randomUUID().toString();
+    String amount = amountEditText.getText().toString();
+    String note = noteEditText.getText().toString();
+    String category = categorySpinner.getSelectedItem().toString();
 
-        String expenseId = UUID.randomUUID().toString();
-        String amount = binding.amount.getText().toString();
-        String note = binding.note.getText().toString();
-        String category = binding.category.getText().toString();
-
-        boolean incomeChecked = binding.incomeRadio.isChecked();
-
-        if (incomeChecked){
-            type = "Income";
-        }
-        else {
-            type = "Expense";
-        }
-
-        if (amount.trim().length() == 0){
-            binding.amount.setError("Empty");
-            return;
-        }
-        ExpenseModel expenseModel = new ExpenseModel(expenseId, note, category, type, Long.parseLong(amount), Calendar.getInstance().getTimeInMillis(), FirebaseAuth.getInstance().getUid());
-
-        FirebaseFirestore
-                .getInstance()
-                .collection("expenses")
-                .document(expenseId)
-                .set(expenseModel)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        setResult(Activity.RESULT_OK); // Set result to indicate success
-                        finish();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Handle failure
-                    }
-                });
+    // Check which radio button is checked and assign the type accordingly
+    String type;
+    if (incomeRadio.isChecked()) {
+        type = "Income";
+    } else {
+        type = "Expense";
     }
+
+    if (amount.trim().isEmpty()) {
+        amountEditText.setError("Empty");
+        return;
+    }
+
+    ExpenseModel expenseModel = new ExpenseModel(expenseId, note, category, type, Long.parseLong(amount), Calendar.getInstance().getTimeInMillis(), FirebaseAuth.getInstance().getUid());
+
+    FirebaseFirestore.getInstance().collection("expenses").document(expenseId).set(expenseModel)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("AddExpenseActivity", "Expense created successfully");
+                    setResult(Activity.RESULT_OK); // Set result to indicate success
+                    finish(); // Finish the activity and return to the main activity
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("AddExpenseActivity", "Failed to create expense: " + e.getMessage());
+                    // Handle failure
+                }
+            });
+    startActivity(new Intent(this, MainActivity.class));
+}
+
+
     private void updateExpense() {
-
         String expenseId = expenseModel.getExpenseId();
-        String amount = binding.amount.getText().toString();
-        String note = binding.note.getText().toString();
-        String category = binding.category.getText().toString();
+        String amount = amountEditText.getText().toString();
+        String note = noteEditText.getText().toString();
+        String category = categorySpinner.getSelectedItem().toString();
 
-        boolean incomeChecked = binding.incomeRadio.isChecked();
-
-        if (incomeChecked){
+        // Check which radio button is checked and assign the type accordingly
+        String type;
+        if (incomeRadio.isChecked()) {
             type = "Income";
-        }
-        else {
+        } else {
             type = "Expense";
         }
 
-        if (amount.trim().length() == 0){
-            binding.amount.setError("Empty");
+        if (amount.trim().isEmpty()) {
+            amountEditText.setError("Empty");
             return;
         }
+
         ExpenseModel model = new ExpenseModel(expenseId, note, category, type, Long.parseLong(amount), expenseModel.getTime(), FirebaseAuth.getInstance().getUid());
 
-        FirebaseFirestore
-                .getInstance()
-                .collection("expenses")
-                .document(expenseId)
-                .set(model)
+        FirebaseFirestore.getInstance().collection("expenses").document(expenseId).set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -367,4 +228,5 @@ public class AddExpenseActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }
