@@ -5,5 +5,10 @@
          <item name="colorPrimary">@color/green</item>
     </style>
 
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+
     <style name="Theme.ExpenseTracker" parent="Base.Theme.ExpenseTracker" />
 </resources>

@@ -9,4 +9,7 @@
     <color name="button_default_color">#2196F3</color> <!-- Blue -->
     <color name="edittext_text_color">#000000</color> <!-- Black -->
     <color name="button_text_color">#FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="dark_gray">#A9A9A9</color>
+    <color name="light_gray">#D3D3D3</color>
 </resources>

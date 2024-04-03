@@ -1,182 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp"
-    tools:context=".AddExpenseActivity">
+    android:background="@drawable/half_circle_background">
 
-    <androidx.cardview.widget.CardView
+    <!-- Ellipse Background -->
+    <RelativeLayout
+        android:id="@+id/ellipse_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="10dp"
-        app:contentPadding="5dp">
-
+        android:paddingVertical="50dp">
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center">
+
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/app_logo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@mipmap/logo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginVertical="40dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Logo, App Name, and Tagline Layout -->
+    <LinearLayout
+        android:id="@+id/logo_name_tagline_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ellipse_background"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <!-- Logo -->
+<!--        <ImageView-->
+<!--            android:id="@+id/logo"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@mipmap/logo"-->
+<!--            android:layout_marginStart="16dp"/>-->
+
+        <!-- App Name and Tagline -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:gravity="center"
+            android:layout_marginVertical="20dp">
+<!--            <TextView-->
+<!--                android:id="@+id/welcome"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Welcome to"-->
+<!--                android:textSize="25sp"-->
+<!--                android:textColor="@color/black"/>-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- App Name -->
+<!--            <TextView-->
+<!--                android:id="@+id/app_name"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="FairShare"-->
+<!--                android:textSize="50sp"-->
+<!--                android:layout_marginVertical="10dp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="bold"/>-->
+
+            <!-- Tagline -->
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Enter Amount"
-                    android:textColor="@color/green"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/amount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10sp"
-                    android:background="@drawable/edittext_background"
-                    android:hint="Enter Amount"
-                    android:inputType="number"
-                    android:padding="10sp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-
-                <RadioGroup
-                    android:id="@+id/typeRadioGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/incomeRadio"
-                        android:layout_width="115dp"
-                        android:layout_height="wrap_content"
-                        android:text="Income"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <RadioButton
-                        android:id="@+id/expenseRadio"
-                        android:layout_width="134dp"
-                        android:layout_height="wrap_content"
-                        android:text="Expense"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                </RadioGroup>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Category"
-                    android:textColor="@color/green"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/category"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10sp"
-                    android:background="@drawable/edittext_background"
-                    android:inputType="text"
-                    android:padding="10sp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Note"
-                    android:textColor="@color/green"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/note"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10sp"
-                    android:background="@drawable/edittext_background"
-                    android:hint="Any notes for yourself"
-                    android:inputType="text"
-                    android:padding="10sp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-            <!-- Adding style to the button -->
-            <!--            <Button-->
-            <!--                android:id="@+id/saveExpenseButton"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:text="Save Expense"-->
-            <!--                android:textColor="@color/white"-->
-            <!--                android:background="@drawable/button_background"-->
-            <!--                android:textStyle="bold" />-->
+                android:text="FairShare"
+                android:textSize="40sp"
+                android:layout_marginVertical="20dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
-<LinearLayout
-android:weightSum="2"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_alignParentBottom="true"
-android:layout_marginTop="10dp"
-android:layout_marginBottom="10dp">
+    <!-- Button Layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logo_name_tagline_layout"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="20dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
-<TextView
-    android:id="@+id/addIncome"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginRight="10dp"
-    android:layout_weight="1"
-    android:background="@drawable/rounded_background"
-    android:gravity="center"
-    android:padding="10dp"
-    android:text="Add Income"
-    android:textColor="@color/black"
-    android:textSize="24sp" />
+        <Button
+            android:id="@+id/personal_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_background"
+            android:text="Personal"
+            android:textColor="@color/white" />
 
-<TextView
-    android:id="@+id/addExpense"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_weight="1"
-    android:background="@drawable/rounded_background"
-    android:gravity="center"
-    android:padding="10dp"
-    android:text="Add Expense"
-    android:textColor="@color/black"
-    android:textSize="24sp" />
+        <Button
+            android:id="@+id/group_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_background"
+            android:text="Group"
+            android:textColor="@color/white" />
 
-</LinearLayout>
+    </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

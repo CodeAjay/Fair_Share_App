@@ -165,15 +165,22 @@ public class MainActivity extends AppCompatActivity implements OnItemsClick{
         expense = 0;
         getData();
     }
-    private void getData(){
-        FirebaseFirestore
-                .getInstance()
+    private ProgressDialog progressDialog; // Declare ProgressDialog
+
+    private void getData() {
+        progressDialog = new ProgressDialog(this); // Initialize ProgressDialog
+        progressDialog.setMessage("Loading..."); // Set message for ProgressDialog
+        progressDialog.setCancelable(false); // Prevent user from canceling ProgressDialog
+        progressDialog.show(); // Show ProgressDialog
+
+        FirebaseFirestore.getInstance()
                 .collection("expenses")
                 .whereEqualTo("uid", FirebaseAuth.getInstance().getUid())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        progressDialog.dismiss(); // Dismiss ProgressDialog when data is loaded
                         expenseAdapter.clear();
                         List<DocumentSnapshot> dsList = queryDocumentSnapshots.getDocuments();
 
@@ -197,6 +204,13 @@ public class MainActivity extends AppCompatActivity implements OnItemsClick{
                             expenseAdapter.add(expenseModel);
                         }
                         setUpGraph();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss(); // Dismiss ProgressDialog if there is a failure
+                        Toast.makeText(getApplicationContext(), "Failed to load data", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

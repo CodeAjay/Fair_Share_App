@@ -1,0 +1,8 @@
+<!-- ellipse_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/green" /> <!-- Replace your_color with your desired color -->
+    <size
+        android:width="300dp"
+        android:height="300dp" />
+</shape>
