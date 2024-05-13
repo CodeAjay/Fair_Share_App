@@ -38,8 +38,21 @@
             android:exported="false" />
 
         <activity
+            android:name=".AddExpenseGroup"
+            android:exported="false" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".GroupMainActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".NewGroup"
+            android:exported="false" />
+
         <activity
             android:name=".FirstScreenActivity"
             android:exported="true"

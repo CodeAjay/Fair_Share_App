@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-public class FirstScreenActivity extends AppCompatActivity {
+public class FirstScreenActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +27,13 @@ public class FirstScreenActivity extends AppCompatActivity {
             }
         });
 
-//        groupButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Navigate to GroupActivity
-//                Intent intent = new Intent(FirstScreenActivity.this, GroupActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        groupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to GroupActivity
+                Intent intent = new Intent(FirstScreenActivity.this, GroupMainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

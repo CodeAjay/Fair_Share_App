@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/bottomMenu"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/rounded_background"
+        android:padding="8dp">
+
+        <!-- Left Button -->
+        <Button
+            android:id="@+id/summaryBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="Summary" />
+
+        <!-- Right Button -->
+        <Button
+            android:id="@+id/expensesBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Expenses"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="end" />
+    </FrameLayout>
+    <Button
+        android:id="@+id/addExpenseBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/circular_background"
+        android:text="₹"
+        android:textSize="40sp"
+        android:padding="16dp"
+        android:src="@mipmap/logo"/>
+
+</RelativeLayout>

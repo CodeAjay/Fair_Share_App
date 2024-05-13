@@ -24,14 +24,14 @@ public class ExpenseModel implements Serializable {
         this.uid = uid;
     }
 
-    public ExpenseModel(String expenseId, String note, String category, String type, long amount, long time) {
-        this.expenseId = expenseId;
-        this.note = note;
-        this.category = category;
-        this.type = type;
-        this.amount = amount;
-        this.time = time;
-    }
+//    public ExpenseModel(String expenseId, String note, String category, String type, long amount, long time) {
+//        this.expenseId = expenseId;
+//        this.note = note;
+//        this.category = category;
+//        this.type = type;
+//        this.amount = amount;
+//        this.time = time;
+//    }
 
     public String getType() {
         return type;
