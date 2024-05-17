@@ -25,15 +25,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!--                <TextView-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginBottom="10dp"-->
-                <!--                    android:text="Expense Name"-->
-                <!--                    android:textColor="@color/green"-->
-                <!--                    android:textSize="20sp"-->
-                <!--                    android:textStyle="bold" />-->
-
                 <EditText
                     android:id="@+id/expenseNameGroup"
                     android:layout_width="match_parent"
@@ -41,9 +32,10 @@
                     android:layout_marginBottom="10sp"
                     android:background="@drawable/edittext_background"
                     android:hint="Expense Name"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:padding="10sp"
                     android:textColor="@color/black"
+                    android:textColorHint="@color/dark_gray"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -52,15 +44,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <!--                <TextView-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginBottom="10dp"-->
-                <!--                    android:text="Amount"-->
-                <!--                    android:textColor="@color/green"-->
-                <!--                    android:textSize="20sp"-->
-                <!--                    android:textStyle="bold" />-->
 
                 <EditText
                     android:id="@+id/amountGroup"
@@ -72,6 +55,7 @@
                     android:inputType="number"
                     android:padding="10sp"
                     android:textColor="@color/black"
+                    android:textColorHint="@color/dark_gray"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -90,25 +74,15 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <!--                <EditText-->
-                <!--                    android:id="@+id/category"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginBottom="10sp"-->
-                <!--                    android:background="@drawable/edittext_background"-->
-                <!--                    android:inputType="text"-->
-                <!--                    android:padding="10sp"-->
-                <!--                    android:textColor="@color/black"-->
-                <!--                    android:textSize="20sp" />-->
                 <Spinner
                     android:id="@+id/paidBy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10sp"
+                    android:background="@drawable/edittext_background"
                     android:padding="10sp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:background="@drawable/edittext_background" />
+                    android:textColor="@color/dark_gray"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -131,21 +105,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
                 </androidx.recyclerview.widget.RecyclerView>
-
-                <!--                <EditText-->
-                <!--                    android:id="@+id/note"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginBottom="10sp"-->
-                <!--                    android:background="@drawable/edittext_background"-->
-                <!--                    android:hint="Any notes for yourself"-->
-                <!--                    android:inputType="text"-->
-                <!--                    android:padding="10sp"-->
-                <!--                    android:textColor="@color/black"-->
-                <!--                    android:textSize="20sp" />-->
-
 
             </LinearLayout>
 

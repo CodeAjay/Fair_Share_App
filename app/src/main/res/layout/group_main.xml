@@ -12,18 +12,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Spinner
+            android:id="@+id/groupSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="80dp">
+            android:layout_marginBottom="80dp" />
 
-        </androidx.recyclerview.widget.RecyclerView>
-
-<!--        <include layout="@layout/bottom_menu" />-->
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -41,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:text="Summary" />
+                    android:text="Person/Group" />
 
                 <!-- Right Button -->
                 <Button
@@ -60,6 +62,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="0dp"
                 android:background="@drawable/circular_background"
+                android:textColor="@color/black"
                 android:text="₹"
                 android:textSize="40sp"
                 android:padding="16dp"

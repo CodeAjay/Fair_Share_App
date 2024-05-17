@@ -1,24 +1,16 @@
 package com.example.expensetracker;
 
-public class Person {
-    private String pId;
+import java.io.Serializable;
+
+public class Person implements Serializable {
     private String personName;
+    private double balance;
 
-    public Person() {
-        // Default constructor required for Firebase
-    }
+    public Person(){}
 
-    public Person(String pId, String personName) {
-        this.pId = pId;
+    public Person(String personName, double balance) {
         this.personName = personName;
-    }
-
-    public String getPId() {
-        return pId;
-    }
-
-    public void setPId(String pId) {
-        this.pId = pId;
+        this.balance = balance;
     }
 
     public String getPersonName() {
@@ -28,5 +20,27 @@ public class Person {
     public void setPersonName(String personName) {
         this.personName = personName;
     }
-}
 
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Person person = (Person) o;
+
+        return personName != null ? personName.equals(person.personName) : person.personName == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return personName != null ? personName.hashCode() : 0;
+    }
+}

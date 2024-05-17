@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/createGroup"
+        android:id="@+id/addExpense"
         android:title="Add Expense"
         android:background="@color/white"
         app:showAsAction="always"/>
