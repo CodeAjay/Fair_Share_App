@@ -49,6 +49,12 @@
             android:name=".GroupMainActivity"
             android:exported="false" />
 
+        <activity android:name=".ShowExpenses"
+            android:exported="false">
+
+        </activity>
+
+
         <activity
             android:name=".NewGroup"
             android:exported="false" />

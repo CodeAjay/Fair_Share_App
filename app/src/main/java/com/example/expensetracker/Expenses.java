@@ -10,7 +10,7 @@ public class Expenses implements Serializable {
     private Person paidBy;
     private double share;
 
-    public Expenses(){}
+    public Expenses() {}
 
     public Expenses(String description, double amount, List<Person> participants, Person paidBy, double share) {
         this.description = description;

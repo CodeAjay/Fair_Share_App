@@ -106,6 +106,8 @@ public class AddExpenseGroup extends AppCompatActivity {
         return true;
     }
 
+
+
     private double calculateShare(double amount, List<Person> participants, Person paidBy) {
         int numParticipants = participants.size();
         boolean isPayerIncluded = participants.contains(paidBy);
@@ -113,33 +115,22 @@ public class AddExpenseGroup extends AppCompatActivity {
     }
 
     private void handleExpense(Expenses expense) {
-        // Update balances
-        for (Person person : expense.getParticipants()) {
-            if (person.equals(expense.getPaidBy())) {
-                person.setBalance(person.getBalance() + expense.getAmount() - expense.getShare());
-            } else {
-                person.setBalance(person.getBalance() - expense.getShare());
-            }
-        }
-
-        if (!expense.getParticipants().contains(expense.getPaidBy())) {
-            expense.getPaidBy().setBalance(expense.getPaidBy().getBalance() + expense.getAmount());
-        }
-
         // Retrieve the group document from Firestore
         String groupId = getIntent().getStringExtra("groupId");
         if (groupId != null) {
             DocumentReference groupRef = db.collection("groups").document(groupId);
             groupRef.get().addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.exists()) {
-                    // Retrieve the current group expense model
                     GroupExpenseModel groupExpenseModel = documentSnapshot.toObject(GroupExpenseModel.class);
                     if (groupExpenseModel != null) {
-                        // Add the new expense to the group expense model
-                        groupExpenseModel.addExpense(expense);
+                        List<Expenses> expensesList = groupExpenseModel.getExpenses();
+                        if (expensesList == null) {
+                            expensesList = new ArrayList<>();
+                        }
+                        expensesList.add(expense);
 
-                        // Update the group document in Firestore with the updated group expense model
-                        groupRef.update("groupExpenseModel", groupExpenseModel)
+                        // Update only the 'expenses' field in Firestore
+                        groupRef.update("expenses", expensesList)
                                 .addOnSuccessListener(aVoid -> showToast("Expense added successfully"))
                                 .addOnFailureListener(e -> showToast("Error adding expense: " + e.getMessage()));
                     } else {
@@ -153,6 +144,48 @@ public class AddExpenseGroup extends AppCompatActivity {
             showToast("Group ID not found");
         }
     }
+
+//    private void handleExpense(Expenses expense) {
+//        // Update balances
+//        for (Person person : expense.getParticipants()) {
+//            if (person.equals(expense.getPaidBy())) {
+//                person.setBalance(person.getBalance() + expense.getAmount() - expense.getShare());
+//            } else {
+//                person.setBalance(person.getBalance() - expense.getShare());
+//            }
+//        }
+//
+//        if (!expense.getParticipants().contains(expense.getPaidBy())) {
+//            expense.getPaidBy().setBalance(expense.getPaidBy().getBalance() + expense.getAmount());
+//        }
+//
+//        // Retrieve the group document from Firestore
+//        String groupId = getIntent().getStringExtra("groupId");
+//        if (groupId != null) {
+//            DocumentReference groupRef = db.collection("groups").document(groupId);
+//            groupRef.get().addOnSuccessListener(documentSnapshot -> {
+//                if (documentSnapshot.exists()) {
+//                    // Retrieve the current group expense model
+//                    GroupExpenseModel groupExpenseModel = documentSnapshot.toObject(GroupExpenseModel.class);
+//                    if (groupExpenseModel != null) {
+//                        // Add the new expense to the group expense model
+//                        groupExpenseModel.addExpense(expense);
+//
+//                        // Update the group document in Firestore with the updated group expense model
+//                        groupRef.update("groupExpenseModel", groupExpenseModel)
+//                                .addOnSuccessListener(aVoid -> showToast("Expense added successfully"))
+//                                .addOnFailureListener(e -> showToast("Error adding expense: " + e.getMessage()));
+//                    } else {
+//                        showToast("Group expense model not found");
+//                    }
+//                } else {
+//                    showToast("Group document does not exist");
+//                }
+//            }).addOnFailureListener(e -> showToast("Failed to retrieve group document: " + e.getMessage()));
+//        } else {
+//            showToast("Group ID not found");
+//        }
+//    }
 
 
     private void updatePersonsSpinner(List<Person> persons) {

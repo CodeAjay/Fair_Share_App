@@ -33,7 +33,7 @@ public class GroupMainActivity extends AppCompatActivity {
     private Spinner groupSpinner;
     private Button leftButton, rightButton, addExpenseBtn;
     private Group selectedGroup; // Variable to store the selected group
-
+    private boolean isGroupSelected = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -82,9 +82,13 @@ public class GroupMainActivity extends AppCompatActivity {
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(GroupMainActivity.this, ShowExpenses.class); // Correctly configured to start ShowExpenses activity
+                intent.putExtra("groupId", selectedGroup.getGroupId());
+                startActivity(intent);
                 showToast("Right Button Clicked");
             }
         });
+
 
         // Set OnClickListener for addExpenseBtn
         addExpenseBtn.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +122,7 @@ public class GroupMainActivity extends AppCompatActivity {
 
                     //TODO: Add new person to existing group
                     int selectedGroupPosition = groupSpinner.getSelectedItemPosition();
-                    Group selectedGroup = groups.get(selectedGroupPosition);
+                    selectedGroup = groups.get(selectedGroupPosition);
                     // Open NewGroup activity with selected group details
                     openNewGroupWithGroupDetails(selectedGroup);
                     return true;
@@ -147,6 +151,14 @@ public class GroupMainActivity extends AppCompatActivity {
         intent.putExtra("selectedGroup", group);
         startActivity(intent);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Only fetch groups if the groups list is empty
+        if (groups.isEmpty()) {
+            fetchGroups();
+        }
+    }
 
     private void fetchGroups() {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -162,11 +174,18 @@ public class GroupMainActivity extends AppCompatActivity {
                         }
                         // Populate the dropdown menu with group names
                         populateSpinner();
+                        // Set the selected group if not already set and groups list is not empty
+                        if (!isGroupSelected && !groups.isEmpty()) {
+                            groupSpinner.setSelection(0);
+                            this.selectedGroup = groups.get(0); // Set the first group as default
+                            isGroupSelected = true; // Set the flag to true to indicate that the group has been selected
+                        }
                     } else {
                         showToast("Failed to fetch groups");
                     }
                 });
     }
+
 
     private void populateSpinner() {
         List<String> groupNames = new ArrayList<>();
@@ -176,7 +195,65 @@ public class GroupMainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, groupNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         groupSpinner.setAdapter(adapter);
+
+        // Check if the selected group has already been set
+        if (!isGroupSelected) {
+            // Set the selected group if not already set and groups list is not empty
+            if (selectedGroup != null && groups.contains(selectedGroup)) {
+                int selectedIndex = groups.indexOf(selectedGroup);
+                groupSpinner.setSelection(selectedIndex);
+                isGroupSelected = true; // Set the flag to true to indicate that the group has been selected
+            } else if (!groups.isEmpty()) {
+                groupSpinner.setSelection(0);
+                this.selectedGroup = groups.get(0); // Set the first group as default
+                isGroupSelected = true; // Set the flag to true to indicate that the group has been selected
+            }
+        }
     }
+//    private void fetchGroups() {
+//        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        FirebaseFirestore.getInstance().collection("groups")
+//                .whereArrayContains("authors", userId)
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        groups.clear();
+//                        for (QueryDocumentSnapshot document : task.getResult()) {
+//                            Group group = document.toObject(Group.class);
+//                            groups.add(group);
+//                        }
+//                        // Populate the dropdown menu with group names
+//                        populateSpinner(selectedGroup); // Pass selectedGroup here
+//                    } else {
+//                        showToast("Failed to fetch groups");
+//                    }
+//                });
+//    }
+//
+//
+//    private void populateSpinner(Group selectedGroup) {
+//        List<String> groupNames = new ArrayList<>();
+//        for (Group group : groups) {
+//            groupNames.add(group.getGroupName());
+//        }
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, groupNames);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        groupSpinner.setAdapter(adapter);
+//
+//        // Check if selectedGroup is not null and if it exists in the groups list
+//        if (selectedGroup != null && groups.contains(selectedGroup)) {
+//            // Set the selected group in the spinner
+//            int selectedIndex = groups.indexOf(selectedGroup);
+//            groupSpinner.setSelection(selectedIndex);
+//        } else {
+//            // If selectedGroup is null or not found, set the first group as default
+//            if (!groups.isEmpty()) {
+//                groupSpinner.setSelection(0);
+//                this.selectedGroup = groups.get(0); // Update selectedGroup
+//            }
+//        }
+//    }
+
 
     private void updateRecyclerView(List<Person> persons) {
         this.persons.clear();
