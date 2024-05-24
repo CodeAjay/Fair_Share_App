@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,53 +22,54 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginBottom="80dp" />
+    </LinearLayout>
 
-        <RelativeLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <FrameLayout
+            android:id="@+id/bottomMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="70dp"
+            android:background="@drawable/rounded_background"
+            android:padding="8dp"
+            android:layout_alignParentBottom="true">
 
-            <FrameLayout
-                android:id="@+id/bottomMenu"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/rounded_background"
-                android:padding="8dp">
-
-                <!-- Left Button -->
-                <Button
-                    android:id="@+id/summaryBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="Person/Group" />
-
-                <!-- Right Button -->
-                <Button
-                    android:id="@+id/expensesBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Expenses"
-                    android:layout_marginRight="20dp"
-                    android:layout_gravity="end" />
-            </FrameLayout>
+            <!-- Left Button -->
             <Button
-                android:id="@+id/addExpenseBtn"
+                android:id="@+id/summaryBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="0dp"
-                android:background="@drawable/circular_background"
-                android:textColor="@color/black"
-                android:text="₹"
-                android:textSize="40sp"
-                android:padding="16dp"
-                android:src="@mipmap/logo"/>
+                android:layout_marginLeft="20dp"
+                android:text="Person/Group" />
 
-        </RelativeLayout>
+            <!-- Right Button -->
+            <Button
+                android:id="@+id/expensesBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expenses"
+                android:layout_marginRight="20dp"
+                android:layout_gravity="end" />
+        </FrameLayout>
+        <Button
+            android:id="@+id/addExpenseBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/circular_background"
+            android:textColor="@color/black"
+            android:text="₹"
+            android:textSize="40sp"
+            android:padding="16dp"
+            android:src="@mipmap/logo"/>
+    </RelativeLayout>
 
-    </LinearLayout>
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

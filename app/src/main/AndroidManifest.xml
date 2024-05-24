@@ -50,10 +50,16 @@
             android:exported="false" />
 
         <activity android:name=".ShowExpenses"
-            android:exported="false">
+            android:exported="false"/>
 
-        </activity>
+        <activity android:name=".JoinGroup"
+            android:exported="false"/>
 
+        <activity android:name=".AddPersons"
+            android:exported="false"/>
+
+        <activity android:name=".DeletePersons"
+            android:exported="false"/>
 
         <activity
             android:name=".NewGroup"

@@ -1,0 +1,21 @@
+<!-- res/layout/activity_manage_group_members.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/persons_show_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"/>
+
+    <Button
+        android:id="@+id/delete_person_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Selected Persons" />
+</LinearLayout>

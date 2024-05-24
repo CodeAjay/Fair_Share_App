@@ -2,6 +2,8 @@ package com.example.expensetracker;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +25,7 @@ public class ShowExpenses extends AppCompatActivity {
     private List<Expenses> expenseList = new ArrayList<>();
     private FirebaseFirestore db;
     private FirebaseAuth auth;
+    private TextView noExpensesText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +36,8 @@ public class ShowExpenses extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         expensesAdapter = new GroupExpensesAdapter(expenseList);
         recyclerView.setAdapter(expensesAdapter);
+
+        noExpensesText = findViewById(R.id.noExpensesText);
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -85,26 +90,36 @@ public class ShowExpenses extends AppCompatActivity {
                 GroupExpenseModel groupExpenseModel = documentSnapshot.toObject(GroupExpenseModel.class);
                 if (groupExpenseModel != null) {
                     List<Expenses> expenses = groupExpenseModel.getExpenses();
-                    if (expenses != null) {
+                    if (expenses != null && !expenses.isEmpty()) {
                         expenseList.clear();
                         expenseList.addAll(expenses);
                         expensesAdapter.notifyDataSetChanged();
+                        noExpensesText.setVisibility(View.GONE);  // Hide the "No Expenses Found" message
+                        recyclerView.setVisibility(View.VISIBLE);  // Show the RecyclerView
                         Log.d("ShowExpenses", "Expenses loaded successfully");
                     } else {
                         Log.e("ShowExpenses", "No expenses found in the group expense model");
                         showToast("No expenses found");
+                        noExpensesText.setVisibility(View.VISIBLE);  // Show the "No Expenses Found" message
+                        recyclerView.setVisibility(View.GONE);  // Hide the RecyclerView
                     }
                 } else {
                     Log.e("ShowExpenses", "Group expense model is null");
                     showToast("Failed to load expenses");
+                    noExpensesText.setVisibility(View.VISIBLE);  // Show the "No Expenses Found" message
+                    recyclerView.setVisibility(View.GONE);  // Hide the RecyclerView
                 }
             } else {
                 Log.e("ShowExpenses", "Group document does not exist");
                 showToast("Group document does not exist");
+                noExpensesText.setVisibility(View.VISIBLE);  // Show the "No Expenses Found" message
+                recyclerView.setVisibility(View.GONE);  // Hide the RecyclerView
             }
         }).addOnFailureListener(e -> {
             Log.e("ShowExpenses", "Error fetching expenses", e);
             showToast("Error fetching expenses: " + e.getMessage());
+            noExpensesText.setVisibility(View.VISIBLE);  // Show the "No Expenses Found" message
+            recyclerView.setVisibility(View.GONE);  // Hide the RecyclerView
         });
     }
 
@@ -112,3 +127,4 @@ public class ShowExpenses extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
+
