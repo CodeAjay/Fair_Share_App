@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Dropdown menu for groups -->
-    <item
-        android:id="@+id/groupMenu"
-        android:title="Groups"
-        android:background="@drawable/edittext_background"
-        app:showAsAction="always">
-        <menu>
-            <!-- Define your groups here -->
-            <item
-                android:id="@+id/group1"
-                android:title="Group 1"/>
-            <item
-                android:id="@+id/group2"
-                android:title="Group 2"/>
-            <!-- Add more groups as needed -->
-        </menu>
-    </item>
+<!--    <item-->
+<!--        android:id="@+id/groupMenu"-->
+<!--        android:title="Groups"-->
+<!--        android:background="@drawable/edittext_background"-->
+<!--        app:showAsAction="always">-->
+<!--        <menu>-->
+<!--            &lt;!&ndash; Define your groups here &ndash;&gt;-->
+<!--            <item-->
+<!--                android:id="@+id/group1"-->
+<!--                android:title="Group 1"/>-->
+<!--            <item-->
+<!--                android:id="@+id/group2"-->
+<!--                android:title="Group 2"/>-->
+<!--            &lt;!&ndash; Add more groups as needed &ndash;&gt;-->
+<!--        </menu>-->
+<!--    </item>-->
 
     <!-- New group button -->
     <item

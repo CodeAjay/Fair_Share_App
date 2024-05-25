@@ -1,5 +1,6 @@
 package com.example.expensetracker;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -19,13 +20,13 @@ public class DeletePersons extends AppCompatActivity {
 
     private static final int ADD_PERSON_REQUEST_CODE = 1;
 
-    private Button addPersonButton;
     private Button deleteSelectedPersonsButton;
     private RecyclerView personsRecyclerView;
     private SelectablePersonAdapter selectablePersonAdapter;
     private List<Person> persons = new ArrayList<>();
     private Group selectedGroup;
     private FirebaseFirestore db;
+    private ProgressDialog progressDialog; // Declare ProgressDialog
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,11 @@ public class DeletePersons extends AppCompatActivity {
         selectablePersonAdapter = new SelectablePersonAdapter(persons);
         personsRecyclerView.setAdapter(selectablePersonAdapter);
 
+        // Initialize ProgressDialog
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Deleting...");
+        progressDialog.setCancelable(false);
+
         // Receive the selected group from the Intent
         selectedGroup = (Group) getIntent().getSerializableExtra("selectedGroup");
         if (selectedGroup != null) {
@@ -51,33 +57,13 @@ public class DeletePersons extends AppCompatActivity {
             finish();
         }
 
-        addPersonButton.setOnClickListener(v -> {
-            Intent intent = new Intent(DeletePersons.this, GroupMainActivity.class);
-            intent.putExtra("selectedGroup", selectedGroup);
-            intent.putExtra("personsList", new ArrayList<>(persons));
-            startActivityForResult(intent, ADD_PERSON_REQUEST_CODE);
-        });
-
         deleteSelectedPersonsButton.setOnClickListener(v -> deleteSelectedPersonsFromGroup());
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_PERSON_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data != null && data.hasExtra("newPerson")) {
-                Person newPerson = (Person) data.getSerializableExtra("newPerson");
-                if (newPerson != null) {
-                    persons.add(newPerson);
-                    selectablePersonAdapter.notifyDataSetChanged();
-                }
-            }
-        }
     }
 
     private void deleteSelectedPersonsFromGroup() {
         List<Person> selectedPersons = selectablePersonAdapter.getSelectedPersons();
         if (!selectedPersons.isEmpty()) {
+            progressDialog.show(); // Show ProgressDialog
             persons.removeAll(selectedPersons);
             selectablePersonAdapter.notifyDataSetChanged();
             updateGroupInFirestore();
@@ -89,8 +75,18 @@ public class DeletePersons extends AppCompatActivity {
     private void updateGroupInFirestore() {
         db.collection("groups").document(selectedGroup.getGroupId())
                 .update("persons", persons)
-                .addOnSuccessListener(aVoid -> showToast("Group updated successfully"))
-                .addOnFailureListener(e -> showToast("Error updating group: " + e.getMessage()));
+                .addOnSuccessListener(aVoid -> {
+                    progressDialog.dismiss(); // Dismiss ProgressDialog
+                    showToast("Group updated successfully");
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("selectedGroup", selectedGroup);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss(); // Dismiss ProgressDialog
+                    showToast("Error updating group: " + e.getMessage());
+                });
     }
 
     private void showToast(String message) {

@@ -1,5 +1,6 @@
 package com.example.expensetracker;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,7 @@ public class ShowExpenses extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private TextView noExpensesText;
+    private ProgressDialog progressDialog; // Declare ProgressDialog
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +43,11 @@ public class ShowExpenses extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+
+        // Initialize ProgressDialog
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
 
         // Check if user is authenticated
         if (auth.getCurrentUser() != null) {
@@ -59,8 +66,10 @@ public class ShowExpenses extends AppCompatActivity {
     }
 
     private void checkUserAuthorization(String groupId) {
+        progressDialog.show(); // Show ProgressDialog before checking authorization
         String userId = auth.getCurrentUser().getUid();
         db.collection("groups").document(groupId).get().addOnCompleteListener(task -> {
+            progressDialog.dismiss(); // Dismiss ProgressDialog after checking authorization
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
@@ -83,8 +92,10 @@ public class ShowExpenses extends AppCompatActivity {
     }
 
     private void fetchExpenses(String groupId) {
+        progressDialog.show(); // Show ProgressDialog before fetching expenses
         Log.d("ShowExpenses", "Fetching expenses for group ID: " + groupId);
         db.collection("groups").document(groupId).get().addOnSuccessListener(documentSnapshot -> {
+            progressDialog.dismiss(); // Dismiss ProgressDialog after fetching expenses
             if (documentSnapshot.exists()) {
                 Log.d("ShowExpenses", "Group document exists");
                 GroupExpenseModel groupExpenseModel = documentSnapshot.toObject(GroupExpenseModel.class);
@@ -116,6 +127,7 @@ public class ShowExpenses extends AppCompatActivity {
                 recyclerView.setVisibility(View.GONE);  // Hide the RecyclerView
             }
         }).addOnFailureListener(e -> {
+            progressDialog.dismiss(); // Dismiss ProgressDialog if there's an error
             Log.e("ShowExpenses", "Error fetching expenses", e);
             showToast("Error fetching expenses: " + e.getMessage());
             noExpensesText.setVisibility(View.VISIBLE);  // Show the "No Expenses Found" message
@@ -127,4 +139,3 @@ public class ShowExpenses extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
-

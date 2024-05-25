@@ -42,6 +42,16 @@ public class SelectablePersonAdapter extends RecyclerView.Adapter<SelectablePers
                 holder.checkBox.setChecked(true);
             }
         });
+
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                if (!selectedPersons.contains(person)) {
+                    selectedPersons.add(person);
+                }
+            } else {
+                selectedPersons.remove(person);
+            }
+        });
     }
 
     @Override
@@ -50,7 +60,7 @@ public class SelectablePersonAdapter extends RecyclerView.Adapter<SelectablePers
     }
 
     public List<Person> getSelectedPersons() {
-        return selectedPersons;
+        return new ArrayList<>(selectedPersons);
     }
 
     public static class SelectablePersonViewHolder extends RecyclerView.ViewHolder {
@@ -64,3 +74,4 @@ public class SelectablePersonAdapter extends RecyclerView.Adapter<SelectablePers
         }
     }
 }
+

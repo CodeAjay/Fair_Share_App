@@ -26,6 +26,8 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
     public void onBindViewHolder(@NonNull PersonViewHolder holder, int position) {
         Person person = personList.get(position);
         holder.nameTextView.setText(person.getPersonName());
+        String balance = person.getBalance() != 0 ? String.format("%.2f", person.getBalance()) : "0.00";
+        holder.balanceTextView.setText(balance);
     }
 
     @Override
@@ -34,11 +36,12 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
     }
 
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView;
+        TextView nameTextView, balanceTextView;
 
         public PersonViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.pname);
+            balanceTextView = itemView.findViewById(R.id.amount);
         }
     }
 }

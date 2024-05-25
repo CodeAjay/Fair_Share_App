@@ -17,4 +17,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Person" />
+
+    <TextView
+        android:id="@+id/inviteFriendsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ask your friends to join the group using the following Group ID: "
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingTop="16dp" />
+
+    <Button
+        android:id="@+id/shareButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Share Group ID"
+        android:background="@drawable/rounded_background"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp" />
 </LinearLayout>
