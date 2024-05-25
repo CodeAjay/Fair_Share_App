@@ -32,7 +32,7 @@ public class GroupMainActivity extends AppCompatActivity {
     private static final int NEW_GROUP_REQUEST_CODE = 1;
     private static final int ADD_PERSON_REQUEST_CODE = 2;
     private static final int DELETE_PERSON_REQUEST_CODE = 3;
-    private static final int ADD_EXPENSE_REQUEST_CODE=4;
+    private static final int ADD_EXPENSE_REQUEST_CODE = 4;
 
     private List<Group> groups = new ArrayList<>();
     private List<Person> persons = new ArrayList<>();
@@ -282,11 +282,9 @@ public class GroupMainActivity extends AppCompatActivity {
                 selectedGroup = (Group) data.getSerializableExtra("selectedGroup");
                 fetchGroups(FirebaseAuth.getInstance().getCurrentUser().getUid());
             }
-        }if (requestCode == ADD_EXPENSE_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data != null && data.hasExtra("selectedGroup")) {
-                selectedGroup = (Group) data.getSerializableExtra("selectedGroup");
-                fetchGroups(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            }
+        }else if (requestCode == ADD_EXPENSE_REQUEST_CODE && resultCode == RESULT_OK) {
+            // Reload the groups after adding an expense
+            fetchGroups(FirebaseAuth.getInstance().getCurrentUser().getUid());
         }
     }
 

@@ -30,6 +30,7 @@ public class AddExpenseGroup extends AppCompatActivity {
     private EditText expenseDescription;
     private EditText expenseAmount;
     private FirebaseFirestore db;
+    private Group selectedGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class AddExpenseGroup extends AppCompatActivity {
 
         // Receive the selected group from the Intent
         Intent intent = getIntent();
-        Group selectedGroup = (Group) intent.getSerializableExtra("selectedGroup");
+        selectedGroup = (Group) intent.getSerializableExtra("selectedGroup");
         if (selectedGroup != null) {
             updatePersonsSpinner(selectedGroup.getPersons());
         } else {
@@ -85,6 +86,9 @@ public class AddExpenseGroup extends AppCompatActivity {
 
                 handleExpense(expense, selectedParticipants);
                 showToast("Expense added successfully");
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("selectedGroup", selectedGroup);
+                setResult(RESULT_OK, resultIntent);
                 finish(); // Close the activity
             }
             return true;
@@ -109,7 +113,11 @@ public class AddExpenseGroup extends AppCompatActivity {
     private double calculateShare(double amount, List<Person> participants, Person paidBy) {
         int numParticipants = participants.size();
         boolean isPayerIncluded = participants.contains(paidBy);
-        return amount / (isPayerIncluded ? numParticipants : (numParticipants + 1));
+        if(numParticipants>1){
+            return amount / (isPayerIncluded ? numParticipants : (numParticipants - 1));
+        }else{
+            return amount/(isPayerIncluded ? numParticipants : numParticipants);
+        }
     }
 
     private void handleExpense(Expenses expense, List<Person> selectedParticipants) {
@@ -131,14 +139,20 @@ public class AddExpenseGroup extends AppCompatActivity {
                         List<Person> personsList = groupExpenseModel.getPersons();
                         if (personsList != null) {
                             for (Person person : personsList) {
-                                if (selectedParticipants.contains(person)) {
+                                if (selectedParticipants.contains(person) || expense.getPaidBy().equals(person)) {
                                     if (expense.getPaidBy().equals(person)) {
                                         // Add the share to the person's balance
-                                        person.setBalance(person.getBalance() + (expense.getAmount() - expense.getShare()));
+                                        if(selectedParticipants.contains(expense.getPaidBy())){
+                                            person.setBalance(person.getBalance() + (expense.getAmount() - expense.getShare()));
+                                        }else{
+                                            person.setBalance(person.getBalance()+(expense.getAmount()));
+                                        }
                                     } else {
                                         // Subtract the share from the person's balance
                                         person.setBalance(person.getBalance() - expense.getShare());
                                     }
+                                }else{
+
                                 }
                             }
                         } else {
@@ -152,10 +166,10 @@ public class AddExpenseGroup extends AppCompatActivity {
                         batch.update(groupRef, "persons", personsList);
                         batch.commit().addOnSuccessListener(aVoid -> {
                                     showToast("Expense and balances updated successfully");
-                                    Intent resultIntent = new Intent();
-                                    resultIntent.putExtra("selectedGroup", groupExpenseModel);
-                                    setResult(RESULT_OK, resultIntent);
-                                    finish();
+//                                    Intent resultIntent = new Intent();
+//                                    resultIntent.putExtra("selectedGroup", selectedGroup);
+//                                    setResult(RESULT_OK, resultIntent);
+//                                    finish();
                                 })
                                 .addOnFailureListener(e -> showToast("Error updating Firestore: " + e.getMessage()));
                     } else {

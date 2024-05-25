@@ -18,7 +18,6 @@ import java.util.List;
 
 public class DeletePersons extends AppCompatActivity {
 
-    private static final int ADD_PERSON_REQUEST_CODE = 1;
 
     private Button deleteSelectedPersonsButton;
     private RecyclerView personsRecyclerView;
